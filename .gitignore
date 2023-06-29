@@ -714,3 +714,5 @@ MigrationBackup/
 
 # nix
 result
+# strange, but without this diodes.model is ignored ?!
+!*.model

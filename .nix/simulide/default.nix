@@ -71,18 +71,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share
-    cp -r $TMP/${buildX}/executables/SimulIDE_*/simulide $out/bin/
-    cp -r $TMP/${buildX}/executables/SimulIDE_*/{data,examples} $out/share/
-  '';
-
-  # postFixup = ''
-  #   # generate the parts.db file
-  #   QT_QPA_PLATFORM=offscreen "$out/bin/Fritzing" \
-  #     -db "$out/share/fritzing/parts/parts.db" \
-  #     -pp "$out/share/fritzing/parts" \
-  #     -folder "$out/share/fritzing"
-  # '';
+    mkdir -p $out
+    cp -r $TMP/${buildX}/dist/SimulIDE_*/* $out/
+    cp $src/resources/data/diodes.model $out/bin/data/
+  ''; # FIXME: for some unknown reason diodes is missed by the standard install
 
   meta = with lib; {
     description = ''
