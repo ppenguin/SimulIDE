@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -r $TMP/${buildX}/dist/SimulIDE_*/* $out/
-    cp $src/resources/data/diodes.model $out/bin/data/
-  ''; # FIXME: for some unknown reason diodes is missed by the standard install
+  '';
 
   meta = with lib; {
     description = ''
