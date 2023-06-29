@@ -147,6 +147,7 @@ QMAKE_LINK = /usr/local/Cellar/gcc@7/7.5.0_4/bin/g++-7
 }
 
 runLrelease.commands = lrelease ../resources/translations/*.ts; \
+                        $(MKDIR) ../resources/qm; \
                         $(MOVE) ../resources/translations/*.qm ../resources/qm;
 
 QMAKE_EXTRA_TARGETS += runLrelease
