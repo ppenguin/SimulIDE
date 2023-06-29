@@ -336,7 +336,8 @@ xcuserdata/
 
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
-build_XX/
+build_XX/**
+!build_XX/SimulIDE_Build.pro
 DerivedData/
 *.moved-aside
 *.pbxuser
