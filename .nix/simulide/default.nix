@@ -23,8 +23,8 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simulide";
-  revision = "1425";
-  version = "1.0.1-${revision}";
+  revision = "1723";
+  version = "trunk";
 
   src = ././../..;
 
@@ -46,10 +46,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "src=$src out=$out TMP=$TMP" >&2
     cp -r $src/src $src/resources $src/build_XX $TMP/
-    chmod 775 $TMP/build_XX
+    chmod 775 $TMP/build_XX $TMP/resources $TMP/resources/translations
     substitute $src/SimulIDE.pro $TMP/SimulIDE.pro \
-      --replace "\$\$system( bzr revno )" "${revision}" \
-      && cd ${buildX}
+      --replace "VERSION = \"\"" "VERSION = \"${version}\"" \
+      --replace "RELEASE = \"\"" "RELEASE = \"-${revision}\"" \
+      --replace "\$\$system( bzr revno )" "${revision}"
+    cat $TMP/SimulIDE.pro >&2
+    cd $TMP/${buildX}
   '';
 
   preBuild = ''cd $TMP/${buildX}'';
@@ -62,10 +65,10 @@ stdenv.mkDerivation rec {
   # '';
 
   # env.NIX_CFLAGS_COMPILE = "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
-  # makeFlags = [ "-j1" ]; # at least with -j24 we get an error during translation generation which looks parallelity-related
+  makeFlags = [ "-j1" ]; # at least with -j24 we get an error during translation generation which looks parallelity-related
   
   qmakeFlags = [
-    "SimulIDE.pro"
+    "SimulIDE_Build.pro"
   ];
 
   # postFixup = ''
