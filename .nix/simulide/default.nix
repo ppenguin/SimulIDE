@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
       --replace "VERSION = \"\"" "VERSION = \"${version}\"" \
       --replace "RELEASE = \"\"" "RELEASE = \"-${revision}\"" \
       --replace "\$\$system( bzr revno )" "${revision}"
-    cat $TMP/SimulIDE.pro >&2
     cd $TMP/${buildX}
   '';
 
@@ -65,11 +64,17 @@ stdenv.mkDerivation rec {
   # '';
 
   # env.NIX_CFLAGS_COMPILE = "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
-  makeFlags = [ "-j1" ]; # at least with -j24 we get an error during translation generation which looks parallelity-related
+  # makeFlags = [ "-j1" ]; # at least with -j24 we get an error during translation generation which looks parallelity-related
   
   qmakeFlags = [
     "SimulIDE_Build.pro"
   ];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share
+    cp -r $TMP/${buildX}/executables/SimulIDE_*/simulide $out/bin/
+    cp -r $TMP/${buildX}/executables/SimulIDE_*/{data,examples} $out/share/
+  '';
 
   # postFixup = ''
   #   # generate the parts.db file
