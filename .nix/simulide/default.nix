@@ -8,13 +8,8 @@
 , qtsvg
 , qtmultimedia
 , qtscript
-# , qttools
 , qtserialport
 , which
-# , boost
-# , libngspice
-# , libgit2
-# , quazip
 }:
 
 let
@@ -30,18 +25,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  buildInputs = [ qtbase qtsvg qtserialport qtscript qtmultimedia /* boost  libgit2 quazip libngspice */ ];
-  nativeBuildInputs = [ qmake pkg-config /* qttools */ wrapQtAppsHook which ];
+  buildInputs = [ qtbase qtsvg qtserialport qtscript qtmultimedia ];
+  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook which ];
 
   # https://nixos.org/manual/nixpkgs/stable/#ssec-unpack-phase
 
-  dontMakeSourcesWritable = false;
-
-  # dontUnpack = true;
-  # prePatch = ''
-  #   substitute ${src}/SimulIDE.pro ${src}/SimulIDE.pro \
-  #     --replace "$$system( bzr revno )" "${revision}"
-  # '';
+  dontUnpack = true;
 
   preConfigure = ''
     echo "src=$src out=$out TMP=$TMP" >&2
@@ -55,16 +44,6 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''cd $TMP/${buildX}'';
-  # buildPhase = ''
-  #   cd /tmp/build
-  #   qmake BUILD_DIR=/tmp/build
-  #   make
-  # '';
-  # postPatch = ''
-  # '';
-
-  # env.NIX_CFLAGS_COMPILE = "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
-  # makeFlags = [ "-j1" ]; # at least with -j24 we get an error during translation generation which looks parallelity-related
   
   qmakeFlags = [
     "SimulIDE_Build.pro"
