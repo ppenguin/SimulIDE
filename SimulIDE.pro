@@ -116,22 +116,19 @@ BUILD_DATE = $$system($(which date) +\"\\\"%d-%m-%y\\\"\")
 DEFINES += BUILDDATE=\\\"$$BUILD_DATE\\\"
 
 TARGET_NAME   = SimulIDE_$$VERSION$$RELEASE
-TARGET_PREFIX = $$BUILD_DIR/dist/$$TARGET_NAME/bin
+TARGET_PREFIX = $$BUILD_DIR/executables/$$TARGET_NAME
 
 OBJECTS_DIR *= $$OUT_PWD/build/objects
 MOC_DIR     *= $$OUT_PWD/build/moc
 INCLUDEPATH += $$MOC_DIR
 
-# FIXME: very non-standard paths, but correctly finding resources must be fixed in the sources
-# normally we would have only the bin in bin/simulide and data and examples under share/
-
 win32 | linux {
     DESTDIR = $$TARGET_PREFIX
-    # mkpath( $$TARGET_PREFIX/data )
-    # mkpath( $$TARGET_PREFIX/examples )
+    mkpath( $$TARGET_PREFIX/data )
+    mkpath( $$TARGET_PREFIX/examples )
     copy2dest.commands = \
-        $(COPY_DIR) ../resources/data     $$TARGET_PREFIX/; \
-        $(COPY_DIR) ../resources/examples $$TARGET_PREFIX/; \
+        $(COPY_DIR) ../resources/data     $$TARGET_PREFIX; \
+        $(COPY_DIR) ../resources/examples $$TARGET_PREFIX; \
 }
 macx {
 QMAKE_CC = /usr/local/Cellar/gcc@7/7.5.0_4/bin/gcc-7
@@ -150,7 +147,6 @@ QMAKE_LINK = /usr/local/Cellar/gcc@7/7.5.0_4/bin/g++-7
 }
 
 runLrelease.commands = lrelease ../resources/translations/*.ts; \
-                        $(MKDIR) ../resources/qm; \
                         $(MOVE) ../resources/translations/*.qm ../resources/qm;
 
 QMAKE_EXTRA_TARGETS += runLrelease
