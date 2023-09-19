@@ -34,17 +34,22 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     echo "src=$src out=$out TMP=$TMP" >&2
+
     cp -r $src/src $src/resources $src/build_XX $TMP/
     chmod 775 $TMP/build_XX $TMP/resources $TMP/resources/translations
+
     substitute $src/SimulIDE.pro $TMP/SimulIDE.pro \
       --replace "VERSION = \"\"" "VERSION = \"${version}\"" \
       --replace "RELEASE = \"\"" "RELEASE = \"-${revision}\"" \
       --replace "\$\$system( bzr revno )" "${revision}"
+    
+    patch $TMP/SimulIDE.pro < $src/patches/SimulIDE.pro.patch
+    
     cd $TMP/${buildX}
   '';
 
   preBuild = ''cd $TMP/${buildX}'';
-  
+
   qmakeFlags = [
     "SimulIDE_Build.pro"
   ];
