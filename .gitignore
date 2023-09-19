@@ -242,6 +242,8 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
+#allow top-level makefile
+!/Makefile
 *build-*
 *.qm
 *.prl
